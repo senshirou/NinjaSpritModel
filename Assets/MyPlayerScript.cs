@@ -9,10 +9,10 @@ public class MyPlayerScript : MonoBehaviour
 
 	[SerializeField] GameObject Camera;
 
-	public float speed = 600.0f;
-	public float turnSpeed = 400.0f;
-	private Vector3 moveDirection = Vector3.zero;
-	public float gravity = 20.0f;
+	//public float speed = 600.0f;
+	//public float turnSpeed = 400.0f;
+	//private Vector3 moveDirection = Vector3.zero;
+	//public float gravity = 20.0f;
 
 	float MySpeed;
 	float MySpeedRate = 0.02f;
@@ -55,7 +55,7 @@ public class MyPlayerScript : MonoBehaviour
 
 	void Update()
 	{
-		
+		//Animationの設定
 		if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
 		{
 			anim.SetInteger("AnimationPar", 1);
@@ -65,6 +65,8 @@ public class MyPlayerScript : MonoBehaviour
 			anim.SetInteger("AnimationPar", 0);
 		}
 
+		//Playerの動作
+		//方向転換
         if (Input.GetKeyDown(KeyCode.A) && gameObject.tag == "Player")
         {
 			transform.rotation = Quaternion.Euler(0, -90, 0);
@@ -75,12 +77,14 @@ public class MyPlayerScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 90, 0);
         }
 
+		//ジャンプ
 		else if((Input.GetKeyDown(KeyCode.Space) && Jumpbool == true) && gameObject.tag == "Player")
         {
 			rb.AddForce(transform.up * MyJumpRate);
 			Jumpbool = false;
         }
 
+		//プレイヤーのみ移動操作
 		else if(gameObject.tag == "Player")
         {
 			MySpeed = Input.GetAxis("Horizontal") * MySpeedRate;
@@ -88,15 +92,14 @@ public class MyPlayerScript : MonoBehaviour
 			transform.position += new Vector3(MySpeed, 0, 0);
 		}
 
-
+		//武器の操作
+		//爆竹
 		if(Input.GetKeyDown(KeyCode.J))
         {
 			_AttackBakutiku.Attack();
-            //HigashiAnim.SetBool("AttackBool", true);
-            //Invoke(nameof(TrueCancell), 0.5f);
-            //Instantiate(BakutikuGroup, BakutikuPoint.transform.position, BakutikuPoint.transform.rotation);
         }
 
+		//鉄球
         if (Input.GetKeyDown(KeyCode.K))
         {
 			Tekkyuu.SetBool("IronballAttack", true);
@@ -123,7 +126,7 @@ public class MyPlayerScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Jumpbool = true;
-        Debug.Log(Jumpbool);
+        //Debug.Log(Jumpbool);
         if (collision.gameObject.tag == "MoveCloud")
         {
             Debug.Log("MOVECLOUD");
@@ -134,7 +137,6 @@ public class MyPlayerScript : MonoBehaviour
 	public void TrueCancell()
     {
 		HigashiAnim.SetBool("AttackBool", false);
-
 	}
 
 	public void TimeCount()

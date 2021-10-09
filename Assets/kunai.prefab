@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3735566973779006819}
   - component: {fileID: 3632440636621253087}
   - component: {fileID: 3639767466717397704}
-  m_Layer: 0
-  m_Name: Higashikunai
+  m_Layer: 7
+  m_Name: kunai
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,9 +28,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3640991489413289405}
-  m_LocalRotation: {x: -0, y: 0.3066325, z: -0, w: 0.95182806}
+  m_LocalRotation: {x: 0, y: 0.30663407, z: 0, w: 0.95182747}
   m_LocalPosition: {x: -0.049, y: 0.78, z: -9.364}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KunaiScript : MonoBehaviour
 {
-    float speed = 0.01f;
+    float speed = 0.05f;
 
     // Start is called before the first frame update
     void Start()

@@ -10,6 +10,8 @@ public class MainCameraMoveScript : MonoBehaviour
     [SerializeField] GameObject Text;
     [SerializeField] TextMeshPro TimeText;
     [SerializeField] GameObject ClearText;
+
+    float CameraPositionY = 10f;
     
 
     float time;
@@ -33,7 +35,7 @@ public class MainCameraMoveScript : MonoBehaviour
 
         try
         {
-            transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y + 2f, transform.position.z);
+            transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y + CameraPositionY, transform.position.z);
         }
         catch(MissingReferenceException e)
         {
