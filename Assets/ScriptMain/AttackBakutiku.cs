@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackBakutiku : AttackScript
+public class AttackBakutiku : MonoBehaviour
 {
 	[SerializeField] GameObject BakutikuGroup;
 	[SerializeField] GameObject BakutikuPoint;
@@ -14,10 +14,16 @@ public class AttackBakutiku : AttackScript
         HigashiAnim = GetComponent<Animator>();
     }
 
-    public override void Attack()
+    public void Attack()
     {
         HigashiAnim.SetBool("AttackBool", true);
-        //Invoke(nameof(TrueCancell), 0.5f);
+        Invoke(nameof(TrueCancell), 0.5f);
         Instantiate(BakutikuGroup, BakutikuPoint.transform.position, BakutikuPoint.transform.rotation);
+        HigashiAnim.SetBool("AttackBool", false);
+    }
+
+    public void TrueCancell()
+    {
+        HigashiAnim.SetBool("AttackBool", false);
     }
 }
