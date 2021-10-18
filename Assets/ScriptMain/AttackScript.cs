@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class AttackScript : MonoBehaviour
 {
-	public virtual void Attack()
+
+    public virtual void Attack()
     {
 
     }

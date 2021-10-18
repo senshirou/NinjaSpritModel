@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e82c325d1325f8c40928d5a041441426, type: 3}
+  m_Name: BakutikuAsset
+  m_EditorClassIdentifier: 
+  BakutikuGroup: {fileID: 5682285042242871070, guid: b816d6d9270b12d4ab793fc16c78cdbc, type: 3}

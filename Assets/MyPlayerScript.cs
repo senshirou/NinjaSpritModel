@@ -4,58 +4,46 @@ using UnityEngine;
 
 public class MyPlayerScript : MonoBehaviour
 {
+	//プレイヤーのアニメーション
 	private Animator anim;
-	private CharacterController controller;
 
-	[SerializeField] GameObject Camera;
-
-	//public float speed = 600.0f;
-	//public float turnSpeed = 400.0f;
-	//private Vector3 moveDirection = Vector3.zero;
-	//public float gravity = 20.0f;
-
+	//プレイヤーのスピード
 	float MySpeed;
 	float MySpeedRate = 0.02f;
 	float MyJumpRate = 700f;
-	float MyUpDown;
 
+	//2段ジャンプ禁止対策
 	bool Jumpbool = true;
-
-	[SerializeField ]GameObject ClearText;
-
-	[SerializeField] GameObject BakutikuGroup;
 	[SerializeField] GameObject BakutikuPoint;
-	
+
 
 	Rigidbody rb;
 
-	bool IronballAttack = true;
-
-
-	//Animation
-	Animator HigashiAnim;
-
-	[SerializeField] Animator Tekkyuu;
-
-
-
-	//ポリフォーフィズム練習
+	//武器の関数設定
+	public delegate void Attack();
+	Attack PlayerAttack;
+	IronBallAttack _IronBallAttack;
 	AttackBakutiku _AttackBakutiku;
-	
+	SlashAttack _SlashAttack;
+
+	//プレイヤーオブジェクト名
+	string PlayerName = "Player";
 
 	void Start()
 	{
-		controller = GetComponent<CharacterController>();
+		//各種をGetComponentする
 		anim = gameObject.GetComponentInChildren<Animator>();
-		HigashiAnim = GetComponent<Animator>();
-		rb = GetComponent<Rigidbody>();
+		_IronBallAttack = GetComponent<IronBallAttack>();
 		_AttackBakutiku = GetComponent<AttackBakutiku>();
+		_SlashAttack = GetComponent<SlashAttack>();
+		rb = GetComponent<Rigidbody>();
 
 	}
 
 	void Update()
 	{
-		//Animationの設定
+		
+		//歩行時のAnimationの設定
 		if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
 		{
 			anim.SetInteger("AnimationPar", 1);
@@ -67,113 +55,84 @@ public class MyPlayerScript : MonoBehaviour
 
 		//Playerの動作
 		//方向転換
-        if (Input.GetKeyDown(KeyCode.A) && gameObject.tag == "Player")
+        if (Input.GetKeyDown(KeyCode.A) && gameObject.tag == PlayerName)
         {
 			transform.rotation = Quaternion.Euler(0, -90, 0);
         }
 
-        else if (Input.GetKeyDown(KeyCode.D) && gameObject.tag == "Player")
+        else if (Input.GetKeyDown(KeyCode.D) && gameObject.tag == PlayerName)
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
         }
 
-		//ジャンプ
-		else if((Input.GetKeyDown(KeyCode.Space) && Jumpbool == true) && gameObject.tag == "Player")
+		else if (Input.GetKey(KeyCode.W) && gameObject.tag == PlayerName)
         {
-			rb.AddForce(transform.up * MyJumpRate);
+			BakutikuPoint.transform.rotation = new Quaternion(0, 90, 90, 0);
+		}
+
+		else
+        {
+			BakutikuPoint.transform.rotation = new Quaternion(0, 0, 0, 0);
+        }
+
+		//ジャンプ
+		if((Input.GetKeyDown(KeyCode.Space) && Jumpbool == true) && gameObject.tag == PlayerName)
+        {
 			Jumpbool = false;
+			rb.AddForce(transform.up * MyJumpRate);
+			
         }
 
 		//プレイヤーのみ移動操作
 		else if(gameObject.tag == "Player")
         {
 			MySpeed = Input.GetAxis("Horizontal") * MySpeedRate;
-			MyUpDown = Input.GetAxis("Vertical") * MySpeedRate;
 			transform.position += new Vector3(MySpeed, 0, 0);
 		}
 
 		//武器の操作
-		//爆竹
 		if(Input.GetKeyDown(KeyCode.J))
         {
-			_AttackBakutiku.Attack();
-        }
-
-		//鉄球
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-			Tekkyuu.SetBool("IronballAttack", true);
-            Invoke(nameof(TimeCount), 0.1f);
-        }
-
-		if(Input.GetKey(KeyCode.S))
-        {
-			Tekkyuu.transform.localRotation= Quaternion.Euler(180, 0, 0);
-        }
-
-		else if(Input.GetKey(KeyCode.W))
-        {
-			Tekkyuu.transform.localRotation = Quaternion.Euler(0, 0, 0);
+			PlayerAttack();
 		}
 
-		else
+		//武器爆竹のインスタンス化
+        if (Input.GetKeyDown(KeyCode.P))
         {
-			Tekkyuu.transform.localRotation = Quaternion.Euler(90, 0, 0);
-		}
+			PlayerAttack = _AttackBakutiku.Attack;
+        }
+
+		//武器鉄球のインスタンス化
+		else if(Input.GetKeyDown(KeyCode.O))
+        {
+			PlayerAttack = _IronBallAttack.Attack;
+        }
+
+		else if(Input.GetKeyDown(KeyCode.U))
+        {
+			PlayerAttack = _SlashAttack.Attack;
+        }
+
 
 	}
 
+	//プレイヤーがオブジェクトに接触した場合の動作
     private void OnCollisionEnter(Collision collision)
-    {
-        Jumpbool = true;
-        //Debug.Log(Jumpbool);
-        if (collision.gameObject.tag == "MoveCloud")
-        {
-            Debug.Log("MOVECLOUD");
-            transform.parent = collision.gameObject.transform;
-        }
-    }
-
-	public void TrueCancell()
-    {
-		HigashiAnim.SetBool("AttackBool", false);
-	}
-
-	public void TimeCount()
-    {
-		Tekkyuu.SetBool("IronballAttack", false);
-	}
-
-
-    private void OnCollisionExit(Collision collision)
-    {
+	{
+		Jumpbool = true;
 		transform.parent = null;
     }
 
-    private void OnTriggerStay(Collider other)
-	{
-		if (other.gameObject.tag == "Ladder")
-		{
-			rb.useGravity = false;
-			Debug.Log("HIT");
-			transform.position += new Vector3(0, MyUpDown, 0);
-		}
-	}
-
     private void OnTriggerEnter(Collider other)
     {
-		if (other.gameObject.tag == "Clear")
-		{
-			ClearText.SetActive(true);
-		}
-	}
-
-    private void OnTriggerExit(Collider other)
-    {
-		Debug.Log("kaijyo");
-        if(other.gameObject.tag == "Ladder")
+        if(other.gameObject.tag == "Bakutiku")
         {
-			rb.useGravity = true;
-        }	
+			
+        }
+
+		else if(other.gameObject.tag == "IronBall")
+        {
+			
+        }
     }
 }
