@@ -10,7 +10,7 @@ public class DelegateBunkiTest : MonoBehaviour
     private void Update()
     {
         inFunction inf = DebugLog1;
-        inf();
+        
     }
 
 
