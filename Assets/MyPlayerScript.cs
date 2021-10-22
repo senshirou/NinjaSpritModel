@@ -26,8 +26,11 @@ public class MyPlayerScript : MonoBehaviour
 	AttackBakutiku _AttackBakutiku;
 	SlashAttack _SlashAttack;
 
+	
+	public string NowWepon;
+
 	//プレイヤーオブジェクト名
-	string PlayerName = "Player";
+	public string PlayerName = "Player";
 
 	void Start()
 	{
@@ -99,17 +102,20 @@ public class MyPlayerScript : MonoBehaviour
 		//武器爆竹のインスタンス化
         if (Input.GetKeyDown(KeyCode.P))
         {
+			NowWepon = "Bakutiku";
 			PlayerAttack = _AttackBakutiku.Attack;
         }
 
 		//武器鉄球のインスタンス化
 		else if(Input.GetKeyDown(KeyCode.O))
         {
+			NowWepon = "IronBall";
 			PlayerAttack = _IronBallAttack.Attack;
         }
 
 		else if(Input.GetKeyDown(KeyCode.U))
         {
+			NowWepon = "Slash";
 			PlayerAttack = _SlashAttack.Attack;
         }
 
